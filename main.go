@@ -13,10 +13,7 @@ import (
 )
 
 func main() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Fatal(".env file not loaded")
-	}
+	_ := godotenv.Load()
 
 	l, err := net.Listen("tcp", ":8080")
 	if err != nil {
