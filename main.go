@@ -3,16 +3,39 @@ package main
 import (
 	"fmt"
 	"net"
+	"os"
 	"strconv"
 	"strings"
+	"time"
 
+	"github.com/joho/godotenv"
 	log "github.com/sirupsen/logrus"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal(".env file not loaded")
+	}
+
 	l, err := net.Listen("tcp", ":8080")
 	if err != nil {
 		log.Fatal(err)
+	}
+
+	delay := os.Getenv("TIMEOUT")
+	var timeout time.Duration
+
+	if delay == "" {
+		timeout = 60 * time.Minute
+	} else {
+		n, err := strconv.ParseInt(delay, 10, 64)
+
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		timeout = time.Duration(n)
 	}
 
 	defer l.Close()
@@ -50,7 +73,7 @@ func main() {
 				return
 			}
 
-			greet := fmt.Sprintf("Hi %s, who are you?\n", name)
+			greet := fmt.Sprintf("Hi %s, lets play!\n", name)
 
 			n, err = c.Write([]byte(greet))
 			if err != nil {
@@ -72,12 +95,45 @@ func main() {
 
 			log.Infof("the game began")
 
+			if err := c.SetReadDeadline(time.Now().Add(timeout * time.Second)); err != nil {
+				log.Error(err)
+				return
+			}
+
 			for {
-				if err := game.print(c); err != nil {
-					log.Error(err)
+				game.check()
+
+				// check if the game already ended
+				if game.Finished {
+					msg := ""
+
+					if game.Won {
+						msg = fmt.Sprintf("GG %s, here you have it flag{%s}\n", game.Player, game.Flag)
+					} else {
+						msg = "jaja noob, try again :3\n"
+					}
+
+					if _, err = c.Write([]byte(msg)); err != nil {
+						log.Error(err)
+					}
+
 					return
 				}
 
+				// if not bot's turn, update the state
+				if !game.PlayerMoves {
+					if err := game.counter(); err != nil {
+						log.Error(err)
+						return
+					}
+
+					continue
+				}
+
+				// print the current game state
+				game.Print(c)
+
+				// get input
 				c.Write([]byte("give me a position (comma separated): "))
 
 				b := make([]byte, 64)
