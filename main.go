@@ -13,7 +13,7 @@ import (
 )
 
 func main() {
-	_ := godotenv.Load()
+	_ = godotenv.Load()
 
 	l, err := net.Listen("tcp", ":8080")
 	if err != nil {
