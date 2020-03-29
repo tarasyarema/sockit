@@ -38,5 +38,5 @@ go run .
 
 If you are a lazy bastard, then just:
 
-- Pull the image `docker pull tarasyarema/sockit:tagname`
+- Pull the image `docker pull tarasyarema/sockit:latest`
 - Run the container `docker run -p 8080:8080 --env-file .env tarasyarema/sockit:tagname`
