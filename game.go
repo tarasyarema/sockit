@@ -209,7 +209,7 @@ func (g *Game) counter() error {
 	}
 
 	if len(moves) == 0 {
-		return fmt.Errorf("no moves avaliable")
+		return fmt.Errorf("no moves available")
 	}
 
 	g.PlayerMoves = !g.PlayerMoves
