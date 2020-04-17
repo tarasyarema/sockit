@@ -1,5 +1,7 @@
 # sockit
 
+[![Go Report Card](https://goreportcard.com/badge/github.com/tarasyarema/sockit)](https://goreportcard.com/report/github.com/tarasyarema/sockit)
+
 This is the code for the day 8 of the [Advent of Corona challenge](https://adventofcorona.hackersatupc.org/).
 
 ## Run
