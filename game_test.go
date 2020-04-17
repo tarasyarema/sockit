@@ -35,7 +35,7 @@ func BenchmarkCheckBoard3(b *testing.B) {
 	board := []int{
 		0, 0, 1, 
 		0, 1, 0, 
-		1, 0, 0
+		1, 0, 0,
 	}
 
 	for n := 0; n < b.N; n++ {
@@ -49,7 +49,7 @@ func BenchmarkCheckBoard4(b *testing.B) {
 		4, 0, 0, 3, 
 		0, 4, 3, 0,
 		0, 3, 4, 0, 
-		3, 0, 0, 4
+		3, 0, 0, 4,
 	}
 
 	for n := 0; n < b.N; n++ {
